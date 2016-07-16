@@ -2,23 +2,35 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
-
 use App\Post;
+use App\Http\Requests;
+use Illuminate\Http\Request;
+// use App\Http\Controllers\Controller;
+use App\Repositories\PostRepository;
+
+
 
 class PostController extends Controller
 {
 
+    /**
+     * Экземпляр PostRepository.
+     *
+     * @var PostRepository
+     */
+    protected $posts;
+
 	/**
 	 * Создание нового экземпляра контроллера.
 	 * 
+     * @param  PostRepository  $posts
 	 * @return void
 	 */
-    public function __construct() 
+    public function __construct(PostRepository $posts) 
     {
     	$this->middleware('auth');
+
+        $this->posts = $posts;
     }
 
 	/**
@@ -29,7 +41,8 @@ class PostController extends Controller
 	 */
     public function index(Request $request) 
     {
-    	$posts = Post::where('user_id', $request->user()->id)->get();
+    	// $posts = Post::where('user_id', $request->user()->id)->get();
+        $posts = $this->posts->forUser($request->user());
 
     	return view('posts.index', [
     		'posts' => $posts,
@@ -55,4 +68,21 @@ class PostController extends Controller
     	return redirect('/posts');
 
     }
+
+    /**
+     * Уничтожить заданную публикацию.
+     *
+     * @param  Request $request
+     * @param  Post $post
+     * @return Response
+     */
+    public function destroy(Request $request, Post $post)
+    {
+        $this->authorize('destroy', $post);
+
+        $post->delete();
+
+        return redirect('/posts');
+    }
+
 }

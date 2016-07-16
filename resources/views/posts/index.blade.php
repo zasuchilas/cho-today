@@ -57,7 +57,7 @@
 
                                         <!-- Post Delete Button -->
                                         <td>
-                                            <form action="{{url('post/' . $post->id)}}" method="POST">
+                                            <form action="{{url('posts/' . $post->id)}}" method="POST">
                                                 {{ csrf_field() }}
                                                 {{ method_field('DELETE') }}
 
