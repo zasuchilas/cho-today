@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateNotesTable extends Migration
+class CreateLinksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +12,14 @@ class CreateNotesTable extends Migration
      */
     public function up()
     {
-        Schema::create('notes', function (Blueprint $table) {
+        Schema::create('links', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->string('text');
-            // $table->integer('user_id')->unsigned();
-            // $table->foreign('user_id')->references('id')->on('users');
             $table->integer('user_id')->index();
+            $table->integer('linked_id')->index();
+            $table->string('address');
+            $table->string('title');
+            $table->string('text');
         });
     }
 
@@ -29,6 +30,6 @@ class CreateNotesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('notes');
+        Schema::drop('links');
     }
 }

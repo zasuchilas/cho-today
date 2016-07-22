@@ -15,9 +15,12 @@ class UserTableSeeder extends Seeder
         User::create([
             'name' => 'cho.chief',
             'email' => 'chief@cho.today',
-            'api_token' => str_random(60),
             'password' => bcrypt('asdfqaz069xcc'),
+            'api_token' => str_random(60),
+            'remember_token' => str_random(10),
         ]);
+
+        factory(User::class, 5)->create();
 
     }
 }
